@@ -6,7 +6,7 @@
   <div class="row">
 
    
-      <button class="btn btn-lg btn-success" (click)="open(content)"> + Import File</button>
+      <button class="btn btn-lg btn-primary" (click)="open(content)"> + Import File</button>
 
   </div>
 
@@ -31,9 +31,17 @@
     <div class="modal-body">
       
         <div class="col-md-12">
+
+          <form>
+        <div class="form-group">
+        <label for="exampleFormControlFile1">Load External File</label>
+        <input type="file" class="form-control-file"  (change)='convertFile(input)' id='fileInput' #input>
+      </div>
+        </form>
+<!-- 
             <div class="row">
-              <input class="form-control" type='file' (change)='convertFile(input)' id='fileInput' #input>
-            </div>
+              <input class="btn btn-lg btn-info" type='file' (change)='convertFile(input)' id='fileInput' #input>
+            </div> -->
           </div>
 
           <hr>
@@ -43,18 +51,27 @@
       <ng-template ngbTabContent>
         <div class="row">
 
-            <div class="col-md-12">
+            
+            <!-- Scroll bar present and enabled -->        
+    <div style=" height: 300px; overflow-y: scroll;">
 
-                <table class="table">
+         <!--   <div *ngIf="result.length == 0"  class="spinner-border text-secondary" role="status">
+                   <span class="sr-only">Loading...</span>
+                 </div>
+          -->
+  
+      
+
+       <table class="table" style="margin-top:10px">
                     <thead class="thead-dark">
                       <tr>
                         <th *ngFor="let item  of headers" scope="col">{{item}}</th>
+
                       </tr>
                     </thead>
                     <tbody>
-                      <tr  *ngFor="let item of result;  let i=index " >
-                        <ng-container *ngIf=" i < 100">
-    
+                      <tr  *ngFor="let item of PreviewArray;  let i=index " >
+                        
                         <td>{{item.id}}</td>
                         <td>{{item.first_name}}</td>
                         <td>{{item.last_name}}</td>
@@ -62,23 +79,23 @@
                         <td>{{item.gender}}</td>
                         <td>{{item.ip_address}}</td>
                         
-                      </ng-container>
-                      
+                        
                       </tr>
                    
                     </tbody>
                   
                       </table>
+    </div>
+               
+             
     
     
-            </div>
+          
 
         </div>
     
   
-        <div *ngIf="result.length == 0"  class="spinner-border text-secondary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
+   
             
   
   
@@ -87,17 +104,61 @@
       </ng-template>
     </ngb-tab>
   
-    <ngb-tab title="Import Data" >
+    <ngb-tab title="Import Data">
       <ng-template ngbTabContent>
-        <div class="row">
+     
 
-          <div class="col-md-12">
-              <button type="button" class="btn btn-primary">Start</button>
-              <p><ngb-progressbar value="10" type="info"></ngb-progressbar></p>
-          </div>
+    <div style=" height: 300px;" class="text-center">
+  
+   <div class="col-md-12 text-center">
+             
+              <div class="row">
+                
+                <div class="col-md-12 mt-3">  
+                
+                  <button type="button" class="btn btn-primary btn-lg">  Import {{ result.length  }} Records To Concours  </button>
+
+                </div>
+
+                <div class="col-md-12 mt-3">
+                  
+                  <ngb-progressbar value="50" type="info"></ngb-progressbar>
+                  
+
+                </div>
+
+
+                <div class="col-md-12 mt-3">
+                  
+                    <span style="font-size: 48px; color: #15a54e;">
+                <i class="fas fa-check-circle"></i>
+             </span>
+              
+               <span style="font-size: 48px; color: #e71927;">
+                <i class="fas fa-exclamation-circle"></i>
+             </span>
+            
+  
+
+                </div>
+              
+              
+
+              </div>
+           
+
+           
+           
+             
+         </div>
          
 
-        </div>
+    </div>
+          
+
+        
+
+       
          
       </ng-template>
     </ngb-tab>
@@ -108,10 +169,15 @@
   
     </div>
     <div class="modal-footer">
-        <div class="col-md-6"> Preview of 100 items </div>
-        <div class="col-md-6"> <button type="button" class="btn btn-outline-danger" (click)="modal.close('Save click')">Close</button>
+        <div class="col-md-6"> Preview of 20 items </div>
+        <div class="col-md-6 text-right"> <button type="button" class="btn btn-outline-danger" (click)="modal.close('Save click')">Close</button>
         </div>
+
       </div>
   
       
   </ng-template>
+
+
+
+

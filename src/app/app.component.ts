@@ -11,13 +11,12 @@ import {NgbProgressbarConfig} from '@ng-bootstrap/ng-bootstrap';
 export class AppComponent {
 
 
-  title = 'csvTOjson works!';
-  text  : any ;
-  JSONData : any;
+  public text  : any ;
+  public JSONData : any;
   public  headers:any[] = [];
   public  result :any[] = [];
   public closeResult: string;
-  public LoadingAnimationBegin:boolean;
+  public PreviewArray: any[] = [];
 
   constructor(private modalService: NgbModal , private config: NgbProgressbarConfig) {
 
@@ -30,15 +29,22 @@ export class AppComponent {
   }
 
 
+
+ // Open Modal 
   open(content) {
     this.modalService.open(content, { size: "lg"} ).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
+      this.ResetImport();
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      this.ResetImport();
     });
   }
 
 
+
+
+  // Close Modal
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -49,8 +55,15 @@ export class AppComponent {
     }
   }
 
+  private dismiss(reason: any){
+    console.log(reason);
+  }
+
+
+
+// Where The Magic Happen
   public csvJSON(csvText) {
-    this.LoadingAnimationBegin = true;
+
    let lines = csvText.split('\n');
 
    this.headers = lines[0].split(',');
@@ -70,9 +83,27 @@ export class AppComponent {
   
    console.log(JSON.stringify(this.result)); // JSON
    this.JSONData = JSON.stringify(this.result);
-   this.LoadingAnimationBegin = false;
+
+   this.genPreviewArray( this.result );
+
 }
 
+
+
+
+// gen Sample Preview Table   
+ public  genPreviewArray = (src:any[]) => {
+
+    for (let i = 0; i < 20; ++i) {
+     
+      this.PreviewArray.push(src[i]);
+      this.PreviewArray[i].concourID = "25";
+    }
+
+ }
+
+
+//Call the Convert Function When The File was selected
  convertFile(input) {
  const reader = new FileReader();
  reader.readAsText(input.files[0]);
@@ -85,6 +116,30 @@ export class AppComponent {
  };
 
 }
+
+// Reset Everything When The Modal was Closed To Improve Performance
+public ResetImport = () => {
+
+  if( this.PreviewArray.length > 0 ){
+    this.text  = '' ;
+    this.JSONData = '';
+
+    this.empty(this.headers);
+    this.empty(this.result);
+    this.empty(this.PreviewArray);
+
+ console.log('Import was Reset');
+  }
+ 
+}
+
+
+//Empty any array
+private  empty(list:any[]) {
+    //empty your array
+    list.length = 0;
+}
+
 
 
 }
